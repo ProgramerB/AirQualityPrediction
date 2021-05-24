@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AQI</title>
+
+          <!-- Bootstrap -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <script type="text/javascript">
+    //var internalID = setInterval(update_values,1000);
+    var intervalID = setInterval(update_values,3000);
+    function update_values()
+    {
+      var aqibucket = document.getElementById("bucket")
+      var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+      $.getJSON($SCRIPT_ROOT + '/_aqibucket',
+      
+        function(data)
+        {
+          $("#bucket").text(data.bucket);
+          if(data.bucket=='Good') 
+          { 
+            aqibucket.style.color = "#00ff00";
+          }
+          if(data.bucket=='Moderate') 
+          { 
+            aqibucket.style.color = "#e1ad01";
+          }
+          if(data.bucket=='Unhealthy for sensitive groups') 
+          { 
+            aqibucket.style.color = "ff7f50";
+          }
+          if(data.bucket=='Unhealthy') 
+          { 
+            aqibucket.style.color = "#ff0000";
+          }
+          if(data.bucket=='Very Unhealthy') 
+          { 
+            aqibucket.style.color = "#9400d3";
+          }
+          if(data.bucket=='Hazardous')
+          {
+            aqibucket.style.color = "#e6e6fa";
+          }
+            console.log(data.bucket)
+        });
+        
+    };
+  </script>
+
+  <body onload = "update_values();">
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">AQI</a>
+          <a class="navbar-brand" href="{{ url_for('pm25_temp') }}">PM 2.5</a>
+          <a class="navbar-brand" href="{{ url_for('pm10_temp') }}">PM 10</a>
+          <a class="navbar-brand" href="{{ url_for('no_temp') }}">NO</a>
+          <a class="navbar-brand" href="{{ url_for('no2_temp') }}">NO2</a>
+          <a class="navbar-brand" href="{{ url_for('nox_temp') }}">NOx</a>
+          <a class="navbar-brand" href="{{ url_for('nh3_temp') }}">NH3</a>
+          <a class="navbar-brand" href="{{ url_for('co_temp') }}">CO</a>
+          <a class="navbar-brand" href="{{ url_for('o3_temp') }}">O3</a>
+          <a class="navbar-brand" href="{{ url_for('so2_temp') }}">SO2</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+{#        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">#}
+{#          <ul class="nav navbar-nav">#}
+{#            <li><a href="#">A link</a></li>#}
+{#          </ul>#}
+{#        </div><!-- /.navbar-collapse -->#}
+      </div>
+    </div>
+
+        <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+      <div class="container-fluid">
+        <br/>
+        <h2>Air Quality is 
+          <span id=bucket>?</span>
+            <script>
+              document.getElementById("bucket").innerHTML;
+            </script>
+        </h2>
+        
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <!-- Example row of columns -->
+      <div class="row">
+
+          <div class="container-fluid" id="data-container"></div>
+
+        </div>
+    </div>
+    <hr>
+
+      <footer>
+        <p>B&copy;</p>
+      </footer>
+    </div> <!-- /container -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/highcharts-more.js"></script>
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+
+    <script src="/static/js/highcharts.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+    <!--<script type="text/javascript">
+
+      var aqibucket = document.getElementById("bucket");
+      var aqibucket_value = document.getElementById("bucket").value;
+      console.log(aqibucket_value)
+      function changeColor()
+      {
+        console.log(data);
+        if(aqibucket_value=='Good') 
+        { 
+          aqibucket.style.color = "#00ff00";
+        }
+        else
+        {
+          aqibucket.style.color = "#000000";
+        }
+      }
+      var interval = setInterval(changeColor, 3000);
+    </script>-->
+    
+  </body>
+</html>
